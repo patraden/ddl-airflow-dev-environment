@@ -17,8 +17,9 @@ echo "CONN_TEST_DB='{\"conn_type\": \"postgres\", \"login\": \"$(echo $TEST_DB_U
 echo "CONN_EXCHANGERATE_HOST_API='{\"conn_type\": \"http\", \"host\": \"https://api.exchangerate.host\", \"schema\": \"\", \"extra\": \"\"}'" >> .env
 echo "VAR_EXCHANGERATE_HOST_PAIR='{\"base\" : \"BTC\", \"code\" : \"USD\" }'" >> .env
 echo "VAR_EXCHANGERATE_HOST_HISTORY_LOAD=1" >> .env
-echo "VAR_EXCHANGERATE_HOST_HISTORY_START='1999-01-01'" >> .env
+echo "VAR_EXCHANGERATE_HOST_HISTORY_START='2010-01-01'" >> .env
 echo "VAR_FILE_STORAGE_MOUNT_POINT='/tmp/storage'" >> .env
+echo "_PIP_ADDITIONAL_REQUIREMENTS='clickhouse-driver==0.2.4'" >> .env
 
 # generate table creation script
 # cat << EOF > ./init.dwh/create_exchange_rates_table.sh

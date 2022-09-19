@@ -3,7 +3,7 @@ set -e
 
 clickhouse client -n <<-EOSQL
 	create database dwh;
-	create table if not exists dwh.exchange_rates (
+	create table if not exists dwh.exchange_rates_raw (
         base FixedString(3) NOT NULL, 
         code FixedString(3) NOT NULL, 
         date Date NOT NULL,

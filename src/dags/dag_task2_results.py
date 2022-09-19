@@ -3,17 +3,14 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from utils import postgres_dql_to_csv, load_text_file, STORAGE_MOUNT_POINT
 
-# https://github.com/coder2j/airflow-docker/blob/main/dags/dag_with_postgres_hooks.py
-
 TODAY = datetime.date.today()
-
 default_args = {
     'owner': 'denis.patrakhin@gmail.com'
     }
 
 with DAG(
-    dag_id="dag_test_v2",
-    description="testing queries",
+    dag_id="dag_task2_results",
+    description="queries requested in second task related to test_db",
     tags=["homework"],
     default_args=default_args,
     start_date=datetime.datetime(TODAY.year, TODAY.month, TODAY.day),
