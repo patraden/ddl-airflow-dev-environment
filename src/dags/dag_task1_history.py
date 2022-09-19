@@ -3,7 +3,7 @@ from datetime import datetime, date, timedelta
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from airflow.operators.http_operator import SimpleHttpOperator
-from utils import (
+from plugins.exchangerate_host_api_utils import (
     history_split_by_year, 
     csv_format_response_timeseries_insert_to_clickhouse, 
     HISTORY_START_DATE, 
