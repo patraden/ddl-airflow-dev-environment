@@ -4,3 +4,5 @@ __pycache__/
 init.dwh/
 storage/
 /logs/
+/dags/
+/plugins/

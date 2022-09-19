@@ -8,28 +8,6 @@
  * c. Направление этих сделок – противоположное (одна на покупку, другая на продажу) 
  * */
 
--- with cte
-with trades as not MATERIALIZED 
-(
-select t.* 
-from mt4.trades t
-left join mt4.marked_trades mt
-	on t.ticket = mt.ticket and mt."type" % 2 = 1
-where mt.ticket is null
-)
-select
-	t1.login, 
-	--count(distinct case when t1.close_time - t1.open_time between '00:00:00.000' and '00:00:59.999' then t1.ticket else null end) qty_quick, 
-	count(t2.ticket) qty_pairs
-from trades t1
-left join trades t2 
-	on t1.login = t2.login and
-	t1.ticket <> t2.ticket and
-	t1.cmd <> t2.cmd and
-	t1.open_time - t2.open_time between '00:00:00.000' and '00:00:29.999'
-group by t1.login
-
--- double select
 with trades_filtered as not materialized
 (
 select t.* 
@@ -81,7 +59,7 @@ left join trades_filtered t2
 	on t1.login = t2.login and
 	t1.ticket <> t2.ticket and
 	t1.cmd <> t2.cmd and
-	t1.open_time - t2.open_time between '00:00:00.000' and '00:00:29.999'
+	t1.open_time - t2.open_time between '00:00:00.000' and '00:00:29.999' -- avoiding duplicate pairs
 group by t1.login
 ), deals_pairs as 
 (
@@ -93,30 +71,15 @@ left join deals_filtered t2
 	on t1.login = t2.login and
 	t1.ticket <> t2.ticket and
 	t1.cmd <> t2.cmd and
-	t1.open_time - t2.open_time between '00:00:00.000' and '00:00:29.999'
+	t1.open_time - t2.open_time between '00:00:00.000' and '00:00:29.999' -- avoiding duplicate pairs
 group by t1.login
 )
---select tm.login, tm.qty, tp.qty
---from trades_within_a_minute tm
---join trades_pairs tp
---	on tm.login = tp.login
---union all
+select tm.login usr, tm.qty qty_quick_trades, tp.qty qty_trade_pairs
+from trades_within_a_minute tm
+join trades_pairs tp
+	on tm.login = tp.login
+union all
 select tm.login, tm.qty, tp.qty
 from deals_within_a_minute tm
 join deals_pairs tp
 	on tm.login = tp.login
-
---with t as 
---(
---select *
---from mt4.trades t 
---where login = 290140265
---)
---select *
---from t t1
---left join t t2 on
---t1.login = t2.login and
---t1.ticket <> t2.ticket and
---t1.cmd <> t2.cmd and
---t1.open_time - t2.open_time between '00:00:00.000' and '00:00:29.999'
---order by t1.ticket
