@@ -40,8 +40,8 @@ with DAG(
             endpoint=f"timeseries?start_date={start_date}&end_date={end_date}&base={BASE}&symbols={CODE}&format=CSV&places={PRECISION}",
             response_check=lambda response: 200 <= response.status_code < 299 and response.text,
             response_filter=csv_format_response_timeseries_insert_to_clickhouse,
-            retries = 1,
-            retry_delay = 15,
+            retries = 3,
+            retry_delay = 30,
             dag=dag,
             )
 

@@ -14,9 +14,8 @@ HISTORY_START_DATE = datetime.strptime(Variable.get("EXCHANGERATE_HOST_HISTORY_S
 HISTORY_LOAD = bool(Variable.get("EXCHANGERATE_HOST_HISTORY_LOAD"))
 DWH_HOST_NAME = "dwh"
 
-DATASET_ID = f"{BASE}_{CODE}"
 PRECISION = 6
-DWH_RAW_TABLE = "dwh.exchange_rates"
+DWH_RAW_TABLE = "dwh.exchange_rates_raw"
 DWH_RAW_TABLE_SCHEMA = set([
     "base",
     "code",
