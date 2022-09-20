@@ -26,7 +26,7 @@ with DAG(
         endpoint=f"latest?&base={BASE}&symbols={CODE}&format=CSV&places={PRECISION}",
         response_check=lambda response: 200 <= response.status_code < 299 and response.text,
         response_filter=csv_response_insert_into_dwh,
-        retries = 1,
+        retries = 3,
         retry_delay = 15,
         dag=dag,
         )
