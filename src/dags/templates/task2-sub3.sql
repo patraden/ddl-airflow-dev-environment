@@ -9,6 +9,7 @@
 
 with trades_all as not materialized
 (
+-- all trades filtered from both mt4 and mt4 schemas
 select 
 	t.ticket,
 	t.login,

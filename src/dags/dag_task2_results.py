@@ -29,5 +29,4 @@ with DAG(
         python_callable=postgres_dql_to_csv
         )
     
-    task2_sub12
-    task2_sub3
+    task2_sub12 >> task2_sub3

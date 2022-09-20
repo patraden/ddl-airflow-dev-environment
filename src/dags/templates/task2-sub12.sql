@@ -8,6 +8,10 @@
  * c. Направление этих сделок – противоположное (одна на покупку, другая на продажу) 
  * */
 
+-- In this query we conciously do not union trades from mt4 and mt5 as logins do not intersect.
+-- Rather we calc both metrics for each and then union
+-- Also both metrics could have been calced in single join (1st metric through dictinct count), however this seems to be slower query.
+
 with trades_filtered as not materialized
 (
 select t.* 
