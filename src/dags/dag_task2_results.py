@@ -1,7 +1,7 @@
 import datetime
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from plugins.exchangerate_host_api_utils import postgres_dql_to_csv, load_text_file, STORAGE_MOUNT_POINT
+from exchangerate_host_api_utils import postgres_dql_to_csv, load_text_file, STORAGE_MOUNT_POINT
 
 TODAY = datetime.date.today()
 default_args = {

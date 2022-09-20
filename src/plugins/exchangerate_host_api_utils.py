@@ -1,17 +1,17 @@
 import csv
-from clickhouse_driver import Client
 from pathlib import Path
 from datetime import datetime, date
 from airflow.models import Variable
 from typing import Iterable, Any, Type, List, Tuple
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow_clickhouse_plugin.hooks.clickhouse_hook import ClickHouseHook
 
 # Assuming get method gets values from env rather than metadata db
 BASE, CODE = Variable.get("EXCHANGERATE_HOST_PAIR", deserialize_json=True).values()
 STORAGE_MOUNT_POINT = Variable.get("FILE_STORAGE_MOUNT_POINT") 
 HISTORY_START_DATE = datetime.strptime(Variable.get("EXCHANGERATE_HOST_HISTORY_START"), '%Y-%m-%d').date()
 HISTORY_LOAD = bool(Variable.get("EXCHANGERATE_HOST_HISTORY_LOAD"))
-DWH_HOST_NAME = "dwh"
+# DWH_HOST_NAME = "dwh"
 PRECISION = 6
 DWH_RAW_TABLE = "dwh.exchange_rates_raw"
 DWH_TABLE = "dwh.exchange_rates"
@@ -82,19 +82,20 @@ def csv_format_response_timeseries_insert_to_clickhouse(response, ti):
     assert(set(DWH_RAW_TABLE_SCHEMA) == set(data_dict[0]), "Uoops, got an unexpected timeseries api response schema mismatch!")
     
     sql = f"INSERT INTO {DWH_RAW_TABLE} ({','.join(c for c in data_dict[0])}) VALUES"
-    client = Client(host=DWH_HOST_NAME)
-    return client.execute(query=sql, params=data_dict)
+    # client = Client(host=DWH_HOST_NAME)
+    hook = ClickHouseHook(clickhouse_conn_id="dwh")
+    return hook.run(sql=sql, parameters=data_dict)
 
-def clickhouse_copy_raw_table_to_optimized():
-    """
-    Copy raw exchange_rates table to optimized version.
-    """
-    client = Client(host=DWH_HOST_NAME)
-    sql = f"""
-        INSERT INTO {DWH_TABLE} ({','.join(c for c in DWH_TABLE_SCHEMA)}) 
-        SELECT {','.join(c for c in DWH_RAW_TABLE_SCHEMA if c not in ("__dag_id__", "__dag_run_id__"))} 
-        FROM {DWH_RAW_TABLE}"""
-    return client.execute(query=sql)
+# def clickhouse_copy_raw_table_to_optimized():
+#     """
+#     Copy raw exchange_rates table to optimized version.
+#     """
+#     hook = ClickHouseHook(clickhouse_conn_id="dwh")
+#     sql = f"""
+#         INSERT INTO {DWH_TABLE} ({','.join(c for c in DWH_TABLE_SCHEMA)}) 
+#         SELECT {','.join(c for c in DWH_RAW_TABLE_SCHEMA if c not in ("__dag_id__", "__dag_run_id__"))} 
+#         FROM {DWH_RAW_TABLE}"""
+#     return hook.run(sql=sql)
 
 def history_split_by_year(
     fr: Type[date], 
