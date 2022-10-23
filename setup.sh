@@ -15,7 +15,8 @@ mkdir -p ./dags ./logs ./plugins ./init.dwh
 # setup airflow environment variables
 echo "AIRFLOW_UID=$(id -u)" > .env
 echo "CONN_DWH='{\"conn_type\": \"sqlite\", \"host\": \"dwh\", \"schema\": \"dwh\", \"extra\": \"\"}'" >> .env
-echo "_PIP_ADDITIONAL_REQUIREMENTS='airflow-clickhouse-plugin==0.8.2'" >> .env
+echo "CONN_DATABRICKS='{\"conn_type\": \"databricks\",\"login\": \"token\",\"password\": \"dapi0b5a1b433e5ed2bf22de7b83ed678968\",\"host\": \"https://2069279851173120.0.gcp.databricks.com\"}'" >> .env
+#echo "_PIP_ADDITIONAL_REQUIREMENTS='airflow-clickhouse-plugin apache-airflow-providers-databricks'" >> .env
 
 # generate dwh init script
 cat << EOF > ./init.dwh/create_dwh_objects.sh
