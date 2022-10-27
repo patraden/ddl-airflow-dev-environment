@@ -46,6 +46,7 @@ x-airflow-common:
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
 #  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.3.4-python3.8}
 #  image: ${AIRFLOW_IMAGE_NAME:-extended_airflow:latest}
+  image: extended-airflow:latest
   build:
     context: .
     dockerfile: airflow.Dockerfile
@@ -76,6 +77,7 @@ x-airflow-common:
 services:
   # exercise environment setup
   dwh:
+   image: extended-clickhouse:latest
    build:
      context: .
      dockerfile: clickhouse.Dockerfile

@@ -1,0 +1,27 @@
+{
+"num_workers": "0",
+"cluster_name": "",
+"spark_version": "10.4.x-scala2.12",
+"spark_conf": {
+    "spark.hadoop.google.cloud.auth.service.account.enable": "true",
+    "spark.hadoop.fs.gs.project.id": "fbs-ga360",
+    "spark.master": "local[*, 4]",
+    "spark.hadoop.fs.gs.auth.service.account.email": "databricks-emarsys@fbs-ga360.iam.gserviceaccount.com",
+    "spark.databricks.cluster.profile": "singleNode"
+    },
+"gcp_attributes": {
+    "use_preemptible_executors": "false",
+    "availability": "ON_DEMAND_GCP",
+    "zone_id": "HA"
+    },
+"node_type_id": "e2-standard-4",
+"driver_node_type_id": "e2-standard-4",
+"ssh_public_keys": [],
+"custom_tags": {"ResourceClass": "SingleNode"},
+"spark_env_vars": {},
+"enable_elastic_disk": "true",
+"cluster_source": "JOB",
+"init_scripts": [],
+"data_security_mode": "LEGACY_SINGLE_USER_STANDARD",
+"runtime_engine": "STANDARD"
+}

@@ -8,15 +8,15 @@ set -e
 rm -Rf ./dags ./logs ./plugins ./init.dwh
 rm -f .env
 
-
 # setup docker-compose volumes
-mkdir -p ./dags ./logs ./plugins ./init.dwh
+mkdir ./logs ./init.dwh
+ln -s "/Users/patraden/PycharmProjects/airflow/dags" .
+ln -s "/Users/patraden/PycharmProjects/airflow/plugins" .
 
 # setup airflow environment variables
 echo "AIRFLOW_UID=$(id -u)" > .env
 echo "CONN_DWH='{\"conn_type\": \"sqlite\", \"host\": \"dwh\", \"schema\": \"dwh\", \"extra\": \"\"}'" >> .env
-echo "CONN_DATABRICKS='{\"conn_type\": \"databricks\",\"login\": \"token\",\"password\": \"$(echo $DB_TOKEN)\",\"host\": \"https://2069279851173120.0.gcp.databricks.com\"}'" >> .env
-#echo "_PIP_ADDITIONAL_REQUIREMENTS='airflow-clickhouse-plugin apache-airflow-providers-databricks'" >> .env
+echo "CONN_DATABRICKS='{\"conn_type\": \"databricks\",\"login\": \"token\",\"password\": \"$(echo $TOKEN)\",\"host\": \"https://2069279851173120.0.gcp.databricks.com\"}'" >> .env
 
 # generate dwh init script
 cat << EOF > ./init.dwh/create_dwh_objects.sh
