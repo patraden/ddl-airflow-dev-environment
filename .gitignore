@@ -3,7 +3,6 @@ __pycache__/
 .env
 .idea/
 init.dwh/
-storage/
 /logs/
 /dags/
 /plugins/

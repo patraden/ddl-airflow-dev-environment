@@ -46,9 +46,10 @@ x-airflow-common:
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
 #  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.3.4-python3.8}
 #  image: ${AIRFLOW_IMAGE_NAME:-extended_airflow:latest}
-  build:
-    context: .
-    dockerfile: airflow.Dockerfile
+  image: extended-airflow:latest
+#  build:
+#    context: .
+#    dockerfile: airflow.Dockerfile
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -59,14 +60,18 @@ x-airflow-common:
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
-#    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+# _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
     # exercise environment setup
     AIRFLOW_CONN_DWH: ${CONN_DWH}
     AIRFLOW_CONN_DATABRICKS: ${CONN_DATABRICKS}
+    AIRFLOW_CONN_API_PROXY_FBS_EU: ${CONN_API_PROXY_FBS_EU}
+    AIRFLOW_CONN_API_PROXY_MY_FBS_COM: ${CONN_API_PROXY_MY_FBS_COM}
+    AIRFLOW_CONN_SLACK_NOTIFICATION_ALARMS_FROM_DATABRICKS_EMARSYS: ${CONN_SLACK_NOTIFICATION_ALARMS_FROM_DATABRICKS_EMARSYS}
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
+    - ./keys:/opt/airflow/keys
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -76,9 +81,10 @@ x-airflow-common:
 services:
   # exercise environment setup
   dwh:
-   build:
-     context: .
-     dockerfile: clickhouse.Dockerfile
+   image: extended-clickhouse:latest
+#   build:
+#     context: .
+#     dockerfile: clickhouse.Dockerfile
    ports:
    - "8123:8123"
    - "9000:9000"
@@ -210,8 +216,8 @@ services:
           echo "   https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html#before-you-begin"
           echo
         fi
-        mkdir -p /sources/logs /sources/dags /sources/plugins
-        chown -R "${AIRFLOW_UID}:0" /sources/{logs,dags,plugins}
+        mkdir -p /sources/logs /sources/dags /sources/plugins /sources/keys
+        chown -R "${AIRFLOW_UID}:0" /sources/{logs,dags,plugins,keys}
         exec /entrypoint airflow version
     # yamllint enable rule:line-length
     environment:
