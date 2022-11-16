@@ -20,6 +20,7 @@ echo "CONN_DWH='{\"conn_type\": \"sqlite\", \"host\": \"dwh\", \"schema\": \"dwh
 echo "CONN_DATABRICKS='{\"conn_type\": \"databricks\",\"login\": \"token\",\"password\": \"$(echo $TOKEN)\",\"host\": \"https://2069279851173120.0.gcp.databricks.com\"}'" >> .env
 echo "CONN_API_PROXY_FBS_EU='{\"conn_type\": \"http\",\"host\": \"http://api-proxy.fbs.eu\"}'" >> .env
 echo "CONN_API_PROXY_MY_FBS_COM='{\"conn_type\": \"http\",\"host\": \"http://api-proxy.my.fbs.com\"}'" >> .env
+echo "CONN_SLACK_NOTIFICATION_ALARMS_FROM_DATABRICKS_EMARSYS='{\"conn_type\": \"http\",\"host\": \"https://hooks.slack.com/services\",\"login\": \"token\", \"password\": \"/T03436MQLJV/B046CKRFG2V/0ahNZNTTeeEgMKMyJxYDQIxF\"}'" >> .env
 
 # generate dwh init script
 cat << EOF > ./init.dwh/create_dwh_objects.sh
