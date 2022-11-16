@@ -4,6 +4,6 @@ __pycache__/
 .idea/
 init.dwh/
 /logs/
+/keys/
 /dags/
 /plugins/
-/keys/
