@@ -5,18 +5,21 @@
 set -e
 
 # flush previous setups if exists
-rm -Rf ./dags ./logs ./plugins ./init.dwh
+rm -Rf ./dags ./logs ./plugins ./init.dwh ./keys
 rm -f .env
 
 # setup docker-compose volumes
 mkdir ./logs ./init.dwh
 ln -s "/Users/patraden/PycharmProjects/airflow/dags" .
 ln -s "/Users/patraden/PycharmProjects/airflow/plugins" .
+ln -s "/Users/patraden/PycharmProjects/airflow/keys" .
 
 # setup airflow environment variables
 echo "AIRFLOW_UID=$(id -u)" > .env
 echo "CONN_DWH='{\"conn_type\": \"sqlite\", \"host\": \"dwh\", \"schema\": \"dwh\", \"extra\": \"\"}'" >> .env
 echo "CONN_DATABRICKS='{\"conn_type\": \"databricks\",\"login\": \"token\",\"password\": \"$(echo $TOKEN)\",\"host\": \"https://2069279851173120.0.gcp.databricks.com\"}'" >> .env
+echo "CONN_API_PROXY_FBS_EU='{\"conn_type\": \"http\",\"host\": \"http://api-proxy.fbs.eu\"}'" >> .env
+echo "CONN_API_PROXY_MY_FBS_COM='{\"conn_type\": \"http\",\"host\": \"http://api-proxy.my.fbs.com\"}'" >> .env
 
 # generate dwh init script
 cat << EOF > ./init.dwh/create_dwh_objects.sh
