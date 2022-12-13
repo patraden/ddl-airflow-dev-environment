@@ -3,6 +3,9 @@ __pycache__/
 .env
 .idea/
 init.dwh/
+/common/
+/scripts/
+/templates/
 /logs/
 /keys/
 /dags/
